@@ -6,7 +6,9 @@ var CurrentElement = "1";
 
 var Mouse = {
     x: 0,
-    y: 0
+    prevx: 0,
+    y: 0,
+    prevy: 0
 }
 const DATA_BY_ID = {
     "0": Empty,
@@ -145,14 +147,17 @@ for (let i = 0; i < GRID_SIZE; i++) {
 }
 
 function Tick() {
-    if (IsHeld && Mouse.x != -1 && Mouse.y != -1) {
-        let size = Number(document.getElementById("brushWidthSlider").value);
-        let optimisedSize = size * 2 - 1;
-        for (let i = 0; i < optimisedSize * optimisedSize; i++) {
-            if (insideGrid(Mouse.x - (size-1) + (i % optimisedSize)) && insideGrid(Mouse.y - (size-1) + Math.floor(i / optimisedSize)))
-                Grid[Mouse.x - (size-1) + (i % optimisedSize)][Mouse.y - (size-1) + Math.floor(i / optimisedSize)] = new DATA_BY_ID[CurrentElement](Mouse.x - (size-1) + (i % optimisedSize), Mouse.y - (size-1) + Math.floor(i / optimisedSize));
-
-        }
+    if (IsHeld && Mouse.x != -1 && Mouse.y != -1 && Mouse.prevx != -1 && Mouse.prevy != -1) {
+        allPoints(Mouse.prevx, Mouse.prevy, Mouse.x, Mouse.y, (xpos, ypos) => {
+            let size = Number(document.getElementById("brushWidthSlider").value);
+            let optimisedSize = size * 2 - 1;
+            for (let i = 0; i < optimisedSize * optimisedSize; i++) {
+                if (insideGrid(xpos - (size-1) + (i % optimisedSize)) && insideGrid(ypos - (size-1) + Math.floor(i / optimisedSize)))
+                    Grid[xpos - (size-1) + (i % optimisedSize)][ypos - (size-1) + Math.floor(i / optimisedSize)] = new DATA_BY_ID[CurrentElement](xpos - (size-1) + (i % optimisedSize), ypos - (size-1) + Math.floor(i / optimisedSize));
+    
+            }
+        });
+        
     }
 
     shuffle(xCoordinates)
@@ -169,6 +174,9 @@ function Tick() {
 }
 
 function onMouseMoved(event) {
+    Mouse.prevx = Mouse.x;
+    Mouse.prevy = Mouse.y;
+    
     let rect = Canvas.getBoundingClientRect();
     Mouse.x = Math.floor((event.clientX - rect.left) / PIXEL_SIZE);
     if (Mouse.x < 0 || Mouse.x >= GRID_SIZE) {
@@ -179,3 +187,38 @@ function onMouseMoved(event) {
         Mouse.y = -1;
     }
 }
+
+function allPoints(x1, y1, x2, y2, func) {
+    // If the two points are the same no need to iterate. Just run the provided function
+    if (x1 == x2 && y1 == y2) {
+      func(x1, y1);
+      return;
+    }
+  
+    const xDiff = x1 - x2;
+    const yDiff = y1 - y2;
+    const xDiffIsLarger = Math.abs(xDiff) > Math.abs(yDiff);
+  
+    const xModifier = xDiff < 0 ? 1 : -1;
+    const yModifier = yDiff < 0 ? 1 : -1;
+  
+    const longerSideLength = Math.max(Math.abs(xDiff), Math.abs(yDiff));
+    const shorterSideLength = Math.min(Math.abs(xDiff), Math.abs(yDiff));
+    const slope = (shorterSideLength == 0 || longerSideLength == 0) ? 0 : (shorterSideLength / longerSideLength);
+  
+    let shorterSideIncrease;
+    for (let i = 1; i <= longerSideLength; i++) {
+      shorterSideIncrease = Math.round(i * slope);
+      let yIncrease, xIncrease;
+      if (xDiffIsLarger) {
+        xIncrease = i;
+        yIncrease = shorterSideIncrease;
+      } else {
+        yIncrease = i;
+        xIncrease = shorterSideIncrease;
+      }
+      let currentY = y1 + (yIncrease * yModifier);
+      let currentX = x1 + (xIncrease * xModifier);
+      func(currentX, currentY);
+    }
+  }
