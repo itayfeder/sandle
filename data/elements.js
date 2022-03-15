@@ -15,7 +15,7 @@ class Element {
 
 class Empty extends Element {
     constructor(x ,y) {
-        super("0", [16, 10, 17, 255], x ,y);
+        super("0", [38, 28, 40, 255], x ,y);
         this.Unbrekable = true;
     }
 }

@@ -148,9 +148,9 @@ function Tick() {
     if (IsHeld && Mouse.x != -1 && Mouse.y != -1) {
         let size = Number(document.getElementById("brushWidthSlider").value);
         let optimisedSize = size * 2 - 1;
-        for (let i = 0; i < optimisedSize; i++) {
-            if (insideGrid(Mouse.x - (size-1) + (i % optimisedSize)) && insideGrid(Mouse.y))
-                Grid[Mouse.x - (size-1) + (i % optimisedSize)][Mouse.y] = new DATA_BY_ID[CurrentElement](Mouse.x - (size-1) + (i % optimisedSize), Mouse.y);
+        for (let i = 0; i < optimisedSize * optimisedSize; i++) {
+            if (insideGrid(Mouse.x - (size-1) + (i % optimisedSize)) && insideGrid(Mouse.y - (size-1) + Math.floor(i / optimisedSize)))
+                Grid[Mouse.x - (size-1) + (i % optimisedSize)][Mouse.y - (size-1) + Math.floor(i / optimisedSize)] = new DATA_BY_ID[CurrentElement](Mouse.x - (size-1) + (i % optimisedSize), Mouse.y - (size-1) + Math.floor(i / optimisedSize));
 
         }
     }
