@@ -160,9 +160,10 @@ class Acid extends Liquid {
                 return;
             }
         }
-        if (insideGrid(this.y+1)) {
-            if (!Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Acid)) {
-                Grid[this.x][this.y+1] = new  DATA_BY_ID["0"](this.x, this.y+1)
+        var side = Math.random() < 0.5 ? 1 : -1;
+        if (insideGrid(this.y+side)) {
+            if (!Grid[this.x][this.y+side].Unbrekable && !(Grid[this.x][this.y+side] instanceof Acid)) {
+                Grid[this.x][this.y+side] = new  DATA_BY_ID["0"](this.x, this.y+side)
                 Grid[this.x][this.y] = new  DATA_BY_ID["0"](this.x, this.y)
                 return;
             }
