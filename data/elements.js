@@ -6,6 +6,7 @@ class Element {
         this.x = x;
         this.y = y;
         this.Unbrekable = false;
+        this.HeatingId = "0";
     }
 
     onTick() {
@@ -58,13 +59,16 @@ class Gas extends Element {
     }
 
     onTick() {
-        if (Grid[this.x][this.y-1] instanceof Empty) {
-            switchPlaces(this.x, this.y, this.x, this.y-1, this)
+        if (insideGrid(this.y-1)) {
+            if (Grid[this.x][this.y-1].CanPassThrough && !(Grid[this.x][this.y-1] instanceof DATA_BY_ID[this.Id])) {
+                switchPlaces(this.x, this.y, this.x, this.y-1, this)
+            }
         }
+        
         var side = Math.random() < 0.5 ? 1 : -1;
         for (let i = 1; i <= this.dispersionRate; i++) {
             if (insideGrid(this.x+side)) {
-                if (Grid[this.x+side][this.y] instanceof Empty) {
+                if (Grid[this.x+side][this.y].CanPassThrough) {
                     switchPlaces(this.x, this.y, this.x+side, this.y, this)
                     continue
                 }
@@ -119,6 +123,7 @@ class Water extends Liquid {
     constructor(x ,y) {
         super("2", [30, 144, 255, 255], x ,y);
         this.dispersionRate = 2
+        this.HeatingId = "3";
     }
 
     onTick() {
@@ -214,6 +219,43 @@ class Multi extends Solid {
 class Wall extends Solid {
     constructor(x, y) {
         super("6", [170, 74, 68, 255], x, y);
-        this.Unbrekable = false;
+    }
+}
+
+class Fire extends Gas {
+    constructor(x, y) {
+        super("7", [252, 116, 5, 255], x, y);
+        this.dispersionRate = 1
+        this.dissipationTime = 5;
+        this.riseUp = false;
+    }
+
+    onTick() {
+        if (this.dissipationTime <= 0) {
+            Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
+            return;
+        }
+        if (this.dissipationTime == 3)
+            this.Color = [84, 84, 79, 255]
+        var side = Math.random() < 0.5 ? 1 : -1;
+        if (insideGrid(this.x+side)) {
+            if (!Grid[this.x+side][this.y].Unbrekable && !(Grid[this.x+side][this.y] instanceof Fire)) {
+                Grid[this.x+side][this.y] = new DATA_BY_ID[Grid[this.x+side][this.y].HeatingId](this.x+side, this.y)
+                Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
+                this.dispersionRate = 0;
+                return;
+            }
+        }
+        if (insideGrid(this.y+1)) {
+            if (!Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire)) {
+                Grid[this.x][this.y+1] = new DATA_BY_ID[Grid[this.x][this.y+1].HeatingId](this.x, this.y+1)
+                Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
+                this.dispersionRate = 0;
+                return;
+            }
+        }
+        super.onTick()
+        this.dissipationTime--;
+        return;
     }
 }
