@@ -89,7 +89,7 @@ class Dust extends Solid {
             } else if (this.isFreeFalling) {
                 var side = Math.random() < 0.5 ? 1 : -1;
                 if (insideGrid(this.x+side)) {
-                    if (Grid[this.x+side][this.y+1].CanPassThrough) {
+                    if (Grid[this.x+side][this.y+1].CanPassThrough && Grid[this.x+side][this.y].CanPassThrough) {
                         this.isFreeFalling = true
                         switchPlaces(this.x, this.y, this.x+side, this.y+1, this) 
                     }
