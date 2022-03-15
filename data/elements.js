@@ -207,3 +207,10 @@ class Multi extends Solid {
         
     }
 }
+
+class Wall extends Solid {
+    constructor(x, y) {
+        super("6", [170, 74, 68, 255], x, y);
+        this.Unbrekable = false;
+    }
+}

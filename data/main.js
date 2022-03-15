@@ -14,7 +14,8 @@ const DATA_BY_ID = {
     "2": Water,
     "3": Steam,
     "4": Acid,
-    "5": Multi
+    "5": Multi,
+    "6": Wall
 };
 
 const GRID_SIZE = 128;
