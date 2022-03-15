@@ -74,33 +74,10 @@ window.onload = function () {
         IsHeld = false;
     });
     window.addEventListener("mousemove", onMouseMoved);
-    window.addEventListener("keydown", OnKeyPress);
     /////////////////////
 
     generateButtons()
 };
-
-function OnKeyPress(event) {
-    var KeyCode = event.keyCode;
-    switch (KeyCode) {
-        case 49:
-        default:
-            CurrentElement = "1";
-            break;
-        case 50:
-            CurrentElement = "2";
-            break;
-        case 51:
-            CurrentElement = "3";
-            break;
-        case 52:
-            CurrentElement = "4";
-            break;
-        case 48:
-            CurrentElement = "0";
-            break;
-    }
-}
 
 function DrawScreen() {
     Ctx.fillStyle = "#100A11";
