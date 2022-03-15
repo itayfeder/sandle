@@ -36,7 +36,7 @@ class Liquid extends Element {
 
     onTick() {
         if (insideGrid(this.y+1)) {
-            if (Grid[this.x][this.y+1].CanPassThrough && !(Grid[this.x][this.y+1] instanceof DATA_BY_ID[this.Id])) {
+            if (Grid[this.x][this.y+1].CanPassThrough && !(Grid[this.x][this.y+1] instanceof DATA_BY_ID[this.Id]) && !(Grid[this.x][this.y+1] instanceof Fire)) {
                 switchPlaces(this.x, this.y, this.x, this.y+1, this)
             }
         }
@@ -237,25 +237,43 @@ class Fire extends Gas {
         }
         if (this.dissipationTime == 3)
             this.Color = [84, 84, 79, 255]
-        var side = Math.random() < 0.5 ? 1 : -1;
-        if (insideGrid(this.x+side)) {
-            if (!Grid[this.x+side][this.y].Unbrekable && !(Grid[this.x+side][this.y] instanceof Fire)) {
-                Grid[this.x+side][this.y] = new DATA_BY_ID[Grid[this.x+side][this.y].HeatingId](this.x+side, this.y)
-                Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
-                this.dispersionRate = 0;
-                return;
-            }
+        let burned = false;
+        if (insideGrid(this.y-1) && !Grid[this.x][this.y-1].Unbrekable && !(Grid[this.x][this.y-1] instanceof Fire)) {
+            Grid[this.x][this.y-1] = new DATA_BY_ID[Grid[this.x][this.y-1].HeatingId](this.x, this.y-1)
+            burned = true;
         }
-        if (insideGrid(this.y+1)) {
-            if (!Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire)) {
-                Grid[this.x][this.y+1] = new DATA_BY_ID[Grid[this.x][this.y+1].HeatingId](this.x, this.y+1)
-                Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
-                this.dispersionRate = 0;
-                return;
-            }
+        if (insideGrid(this.y+1) && !Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire)) {
+            Grid[this.x][this.y+1] = new DATA_BY_ID[Grid[this.x][this.y+1].HeatingId](this.x, this.y+1)
+            burned = true;
         }
+        if (insideGrid(this.x-1) && !Grid[this.x-1][this.y].Unbrekable && !(Grid[this.x-1][this.y] instanceof Fire)) {
+            Grid[this.x-1][this.y] = new DATA_BY_ID[Grid[this.x-1][this.y].HeatingId](this.x-1, this.y)
+            burned = true;
+        }
+        if (insideGrid(this.x+1) && !Grid[this.x+1][this.y].Unbrekable && !(Grid[this.x+1][this.y] instanceof Fire)) {
+            Grid[this.x+1][this.y] = new DATA_BY_ID[Grid[this.x+1][this.y].HeatingId](this.x+1, this.y)
+            burned = true;
+        }
+        if (burned) {
+            Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
+            this.dispersionRate = 0;
+        }
+
         super.onTick()
         this.dissipationTime--;
+        return;
+    }
+}
+
+class Oil extends Liquid {
+    constructor(x ,y) {
+        super("8", [73, 76, 79, 255], x ,y);
+        this.dispersionRate = 2
+        this.HeatingId = "7";
+    }
+
+    onTick() {
+        super.onTick()
         return;
     }
 }

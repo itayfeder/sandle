@@ -18,7 +18,8 @@ const DATA_BY_ID = {
     "4": Acid,
     "5": Multi,
     "6": Wall,
-    "7": Fire
+    "7": Fire,
+    "8": Oil
 };
 
 const GRID_SIZE = 128;
