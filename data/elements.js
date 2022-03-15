@@ -244,15 +244,15 @@ class Fire extends Gas {
             Grid[this.x][this.y-1] = new DATA_BY_ID[Grid[this.x][this.y-1].HeatingId](this.x, this.y-1)
             burned = true;
         }
-        if (insideGrid(this.y+1) && !Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire) && Math.random() > Grid[this.x][this.y-1].Flammability) {
+        if (insideGrid(this.y+1) && !Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire) && Math.random() > Grid[this.x][this.y+1].Flammability) {
             Grid[this.x][this.y+1] = new DATA_BY_ID[Grid[this.x][this.y+1].HeatingId](this.x, this.y+1)
             burned = true;
         }
-        if (insideGrid(this.x-1) && !Grid[this.x-1][this.y].Unbrekable && !(Grid[this.x-1][this.y] instanceof Fire) && Math.random() > Grid[this.x][this.y-1].Flammability) {
+        if (insideGrid(this.x-1) && !Grid[this.x-1][this.y].Unbrekable && !(Grid[this.x-1][this.y] instanceof Fire) && Math.random() > Grid[this.x-1][this.y].Flammability) {
             Grid[this.x-1][this.y] = new DATA_BY_ID[Grid[this.x-1][this.y].HeatingId](this.x-1, this.y)
             burned = true;
         }
-        if (insideGrid(this.x+1) && !Grid[this.x+1][this.y].Unbrekable && !(Grid[this.x+1][this.y] instanceof Fire) && Math.random() > Grid[this.x][this.y-1].Flammability) {
+        if (insideGrid(this.x+1) && !Grid[this.x+1][this.y].Unbrekable && !(Grid[this.x+1][this.y] instanceof Fire) && Math.random() > Grid[this.x+1][this.y].Flammability) {
             Grid[this.x+1][this.y] = new DATA_BY_ID[Grid[this.x+1][this.y].HeatingId](this.x+1, this.y)
             burned = true;
         }
