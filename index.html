@@ -5,18 +5,22 @@
     <script src="data/elements.js"></script>
     <script src="data/gen.js"></script>
     <script src="data/main.js"></script>
+    <script src="https://kit.fontawesome.com/c4d492b758.js" crossorigin="anonymous"></script>
 </head>
 <body style="background-color: #200B26; position: relative;">
     <div id="buttons" style="left: 0; width: 200px; height: 768px; position: absolute; background-color: #34173D;">
         <div id="elementButtons">
-            <h2 style="color: #FFFFFF;">Elements:</h2>
+            <h2 style="color: #FFFFFF; margin-bottom: 0px;">Elements:</h2>
 
         </div>
         <div id="brushSizeButtons">
-            <h2 style="color: #FFFFFF;">Brush Size:</h2>
+            <h2 style="color: #FFFFFF; margin-bottom: 0px;">Brush Size:</h2>
             <input id="brushWidthSlider" type="range" value="2" min="1" max="5" oninput="this.nextElementSibling.value = this.value">
             <output style="color: #FFFFFF; font-size: 24px;">2</output>
-
+        </div>
+        <div id="brushSizeButtons">
+            <h2 style="color: #FFFFFF; margin-bottom: 0px;">Screen Settings:</h2>
+            <button onclick="clearScreen()"><i class="fa-solid fa-arrow-rotate-right"></i></button>
         </div>
     </div>
     <canvas id="screen" width="768" height="768" style="left: 225px; border:5px solid #000000; position: absolute;">

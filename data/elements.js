@@ -36,7 +36,7 @@ class Liquid extends Element {
 
     onTick() {
         if (insideGrid(this.y+1)) {
-            if (Grid[this.x][this.y+1].CanPassThrough && !(Grid[this.x][this.y+1] instanceof DATA_BY_ID[this.Id]) && !(Grid[this.x][this.y+1] instanceof Fire)) {
+            if (Grid[this.x][this.y+1].CanPassThrough && !(Grid[this.x][this.y+1] instanceof Liquid) && !(Grid[this.x][this.y+1] instanceof Fire)) {
                 switchPlaces(this.x, this.y, this.x, this.y+1, this)
             }
         }
@@ -273,6 +273,11 @@ class Oil extends Liquid {
     }
 
     onTick() {
+        if (insideGrid(this.y-1)) {
+            if (Grid[this.x][this.y-1] instanceof Water) {
+                switchPlaces(this.x, this.y, this.x, this.y-1, this)
+            }
+        }
         super.onTick()
         return;
     }

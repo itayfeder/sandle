@@ -68,3 +68,12 @@ function isDark(color) {
         return true;
     }
 }
+
+function clearScreen() {
+    for (let v = 0; v < GRID_SIZE; v++) {
+        Grid[v] = new Array(GRID_SIZE);
+        for (let w = 0; w < GRID_SIZE; w++) {
+            Grid[v][w] = new DATA_BY_ID["0"](v, w);
+        }
+    }
+}
