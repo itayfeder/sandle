@@ -151,7 +151,6 @@ class Acid extends Liquid {
     }
 
     onTick() {
-        super.onTick()
         var side = Math.random() < 0.5 ? 1 : -1;
         if (insideGrid(this.x+side)) {
             if (!Grid[this.x+side][this.y].Unbrekable && !(Grid[this.x+side][this.y] instanceof Acid)) {
@@ -167,6 +166,7 @@ class Acid extends Liquid {
                 return;
             }
         }
+        super.onTick()
         return;
     }
 }
