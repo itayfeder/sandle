@@ -132,6 +132,18 @@ function DrawScreen() {
     // //Ctx.fillStyle = "white";
 }
 
+const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const r = Math.floor(Math.random() * (i+1))
+        ;[array[i], array[r]] = [array[r], array[i]]
+    }
+}
+
+const xCoordinates = []
+for (let i = 0; i < GRID_SIZE; i++) {
+    xCoordinates[i] = i
+}
+
 function Tick() {
     if (IsHeld && Mouse.x != -1 && Mouse.y != -1) {
         let size = Number(document.getElementById("brushWidthSlider").value);
@@ -143,13 +155,15 @@ function Tick() {
         }
     }
 
-    var cells = getCells();
-    cells = cells.sort(() => Math.random() - 0.5)
+    shuffle(xCoordinates)
 
-    for (let i = 0; i < cells.length; i++) {
-        var element = cells[i];
-        if (!(element instanceof Empty)) {
-            element.onTick();
+    for (let i = 0; i < GRID_SIZE; i++) {
+        const x = xCoordinates[i]
+        for (let y = GRID_SIZE - 1; y >= 0; y--) {
+            const element = Grid[x][y]
+            if (!(element instanceof Empty)) {
+                element.onTick();
+            }
         }
     }
 }
