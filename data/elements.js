@@ -33,13 +33,15 @@ class Liquid extends Element {
     }
 
     onTick() {
-        if (Grid[this.x][this.y+1] instanceof Empty) {
-            switchPlaces(this.x, this.y, this.x, this.y+1, this)
+        if (insideGrid(this.y+1)) {
+            if (Grid[this.x][this.y+1].CanPassThrough) {
+                switchPlaces(this.x, this.y, this.x, this.y+1, this)
+            }
         }
         var side = Math.random() < 0.5 ? 1 : -1;
         for (let i = 1; i <= this.dispersionRate; i++) {
             if (insideGrid(this.x+side)) {
-                if (Grid[this.x+side][this.y] instanceof Empty) {
+                if (Grid[this.x+side][this.y].CanPassThrough) {
                     switchPlaces(this.x, this.y, this.x+side, this.y, this)
                     continue
                 }
@@ -128,6 +130,7 @@ class Steam extends Gas {
     constructor(x ,y) {
         super("3", [220, 220, 220, 255], x ,y);
         this.dispersionRate = 2
+        this.CanPassThrough = true;
     }
 
     onTick() {
