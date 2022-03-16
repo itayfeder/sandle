@@ -7,7 +7,9 @@ class Element {
         this.y = y;
         this.Unbrekable = false;
         this.HeatingId = "0";
+        this.CoolingId = "0";
         this.Flammability = 0.5;
+        this.Coolability = 0.01;
     }
 
     onTick() {
@@ -83,12 +85,13 @@ class Gas extends Element {
 class Dust extends Solid {
     constructor(id, color, x, y) {
         super(id, color, x ,y);
+        this.InertialResistance = 0.1;
     }
 
     onTick() {
         if (this.isFreeFalling) {
-            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x+1][this.y].isFreeFalling = true;
-            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x-1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() <= this.InertialResistance) Grid[this.x+1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() <= this.InertialResistance) Grid[this.x-1][this.y].isFreeFalling = true;
         }
         if (insideGrid(this.y+1)) {
             if (Grid[this.x][this.y+1].CanPassThrough) {
@@ -125,6 +128,7 @@ class Water extends Liquid {
         super("2", [30, 144, 255, 255], x ,y);
         this.dispersionRate = 2
         this.HeatingId = "3";
+        this.CoolingId = "9";
     }
 
     onTick() {
@@ -295,26 +299,37 @@ class Ice extends Dust {
     }
 
     onTick() {
-        if (!(Grid[this.x][this.y+1] instanceof Liquid)) {
-            super.onTick()
+        if (insideGrid(this.y-1) && !Grid[this.x][this.y-1].Unbrekable && !(Grid[this.x][this.y-1] instanceof Ice) && Math.random() < Grid[this.x][this.y-1].Coolability) {
+            Grid[this.x][this.y-1] = new DATA_BY_ID[Grid[this.x][this.y-1].CoolingId](this.x, this.y-1)
         }
+        if (insideGrid(this.y+1) && !Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Ice) && Math.random() < Grid[this.x][this.y+1].Coolability) {
+            Grid[this.x][this.y+1] = new DATA_BY_ID[Grid[this.x][this.y+1].CoolingId](this.x, this.y+1)
+        }
+        if (insideGrid(this.x-1) && !Grid[this.x-1][this.y].Unbrekable && !(Grid[this.x-1][this.y] instanceof Ice) && Math.random() < Grid[this.x-1][this.y].Coolability) {
+            Grid[this.x-1][this.y] = new DATA_BY_ID[Grid[this.x-1][this.y].CoolingId](this.x-1, this.y)
+        }
+        if (insideGrid(this.x+1) && !Grid[this.x+1][this.y].Unbrekable && !(Grid[this.x+1][this.y] instanceof Ice) && Math.random() < Grid[this.x+1][this.y].Coolability) {
+            Grid[this.x+1][this.y] = new DATA_BY_ID[Grid[this.x+1][this.y].CoolingId](this.x+1, this.y)
+        }
+        
         if (this.isFreeFalling) {
-            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x+1][this.y].isFreeFalling = true;
-            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x-1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() <= this.InertialResistance) Grid[this.x+1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() <= this.InertialResistance) Grid[this.x-1][this.y].isFreeFalling = true;
         }
-        if (insideGrid(this.y-1)) {
-            if (Grid[this.x][this.y-1] instanceof Liquid) {
+        if (insideGrid(this.y+1)) {
+            if (Grid[this.x][this.y+1].CanPassThrough) {
                 this.isFreeFalling = true
-                switchPlaces(this.x, this.y, this.x, this.y-1, this)
-            } else if (this.isFreeFalling && Grid[this.x][this.y-1] instanceof Liquid) {
+                switchPlaces(this.x, this.y, this.x, this.y+1, this)
+            } else if (this.isFreeFalling) {
                 var side = Math.random() < 0.5 ? 1 : -1;
                 if (insideGrid(this.x+side)) {
-                    if (Grid[this.x+side][this.y-1].CanPassThrough && Grid[this.x+side][this.y].CanPassThrough) {
+                    if (Grid[this.x+side][this.y+1].CanPassThrough && !(Grid[this.x+side][this.y] instanceof Liquid)) {
                         this.isFreeFalling = true
-                        switchPlaces(this.x, this.y, this.x+side, this.y-1, this) 
+                        switchPlaces(this.x, this.y, this.x+side, this.y+1, this) 
                     }
                 }
             }
+            
         }
         
         return;
