@@ -77,13 +77,14 @@ window.onload = function () {
     window.addEventListener("mouseup", function(e) {
         IsHeld = false;
     });
-    window.addEventListener("ontouchstart", function(e) {
+    window.addEventListener("touchstart", function(e) {
         IsHeld = true;
     });
-    window.addEventListener("ontouchend", function(e) {
+    window.addEventListener("touchend", function(e) {
         IsHeld = false;
     });
     window.addEventListener("mousemove", onMouseMoved);
+    window.addEventListener("touchmove", onTouchMoved);
     /////////////////////
 
     generateButtons()
@@ -214,6 +215,21 @@ function onMouseMoved(event) {
         Mouse.x = -1;
     }
     Mouse.y = Math.floor((event.clientY - rect.top) / PIXEL_SIZE);
+    if (Mouse.y < 0 || Mouse.y >= GRID_SIZE) {
+        Mouse.y = -1;
+    }
+}
+
+function onTouchMoved(event) {
+    Mouse.prevx = Mouse.x;
+    Mouse.prevy = Mouse.y;
+    
+    let rect = Canvas.getBoundingClientRect();
+    Mouse.x = Math.floor((event.touches[0].clientX - rect.left) / PIXEL_SIZE);
+    if (Mouse.x < 0 || Mouse.x >= GRID_SIZE) {
+        Mouse.x = -1;
+    }
+    Mouse.y = Math.floor((event.touches[0].clientY - rect.top) / PIXEL_SIZE);
     if (Mouse.y < 0 || Mouse.y >= GRID_SIZE) {
         Mouse.y = -1;
     }
