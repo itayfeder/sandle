@@ -87,8 +87,8 @@ class Dust extends Solid {
 
     onTick() {
         if (this.isFreeFalling) {
-            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Sand && Math.random() > 0.1) Grid[this.x+1][this.y].isFreeFalling = true;
-            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Sand && Math.random() > 0.1) Grid[this.x-1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x+1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x-1][this.y].isFreeFalling = true;
         }
         if (insideGrid(this.y+1)) {
             if (Grid[this.x][this.y+1].CanPassThrough) {
@@ -282,6 +282,40 @@ class Oil extends Liquid {
             }
         }
         super.onTick()
+        return;
+    }
+}
+
+class Ice extends Dust {
+    constructor(x ,y) {
+        super("9", [174, 219, 240, 255], x ,y);
+        this.HeatingId = "2";
+        this.isFreeFalling = false;
+    }
+
+    onTick() {
+        if (!(Grid[this.x][this.y+1] instanceof Liquid)) {
+            super.onTick()
+        }
+        if (this.isFreeFalling) {
+            if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x+1][this.y].isFreeFalling = true;
+            if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() > 0.1) Grid[this.x-1][this.y].isFreeFalling = true;
+        }
+        if (insideGrid(this.y-1)) {
+            if (Grid[this.x][this.y-1] instanceof Liquid) {
+                this.isFreeFalling = true
+                switchPlaces(this.x, this.y, this.x, this.y-1, this)
+            } else if (this.isFreeFalling && Grid[this.x][this.y-1] instanceof Liquid) {
+                var side = Math.random() < 0.5 ? 1 : -1;
+                if (insideGrid(this.x+side)) {
+                    if (Grid[this.x+side][this.y-1].CanPassThrough && Grid[this.x+side][this.y].CanPassThrough) {
+                        this.isFreeFalling = true
+                        switchPlaces(this.x, this.y, this.x+side, this.y-1, this) 
+                    }
+                }
+            }
+        }
+        
         return;
     }
 }
