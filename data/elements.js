@@ -95,6 +95,7 @@ class Dust extends Solid {
     constructor(id, color, x, y) {
         super(id, color, x ,y);
         this.InertialResistance = 0.1;
+        this.Gravity = true;
     }
 
     onTick() {
@@ -102,7 +103,7 @@ class Dust extends Solid {
             if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Dust && Math.random() <= this.InertialResistance) Grid[this.x+1][this.y].isFreeFalling = true;
             if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Dust && Math.random() <= this.InertialResistance) Grid[this.x-1][this.y].isFreeFalling = true;
         }
-        if (insideGrid(this.y+1)) {
+        if (this.Gravity && insideGrid(this.y+1)) {
             if (Grid[this.x][this.y+1].CanPassThrough) {
                 this.isFreeFalling = true
                 switchPlaces(this.x, this.y, this.x, this.y+1, this)
@@ -361,5 +362,155 @@ class Wood extends Solid {
         this.HeatingId = "7";
         this.Flammability = 0.9;
         this.Category = CATEGORY.MATERIALS;
+    }
+}
+
+class Plant extends Dust {
+    constructor(x, y) {
+        super("11", [90, 171, 97, 255], x, y);
+        this.Category = CATEGORY.LIFE;
+    }
+
+    flower() {
+        if (Math.random() < 0.02) {
+            Grid[this.x][this.y] = new Flower(this.x, this.y)
+            Grid[this.x][this.y].bloom()
+        }
+    }
+
+    onTick() {
+        super.onTick();
+        var watered = false;
+        if (insideGrid(this.y-1) && Grid[this.x][this.y-1] instanceof Water) {
+            Grid[this.x][this.y-1] = new DATA_BY_ID["0"](this.x, this.y-1)
+            watered = true;
+        }
+        if (insideGrid(this.y+1) && Grid[this.x][this.y+1] instanceof Water) {
+            Grid[this.x][this.y+1] = new DATA_BY_ID["0"](this.x, this.y+1)
+            watered = true;
+        }
+        if (insideGrid(this.x-1) && Grid[this.x-1][this.y] instanceof Water) {
+            Grid[this.x-1][this.y] = new DATA_BY_ID["0"](this.x-1, this.y)
+            watered = true;
+        }
+        if (insideGrid(this.x+1) && Grid[this.x+1][this.y] instanceof Water) {
+            Grid[this.x+1][this.y] = new DATA_BY_ID["0"](this.x+1, this.y)
+            watered = true;
+        }
+        if (watered) {
+            var side = Math.random() < 0.5 ? 1 : -1;
+            if (insideGrid(this.x+side) && Math.random() < 0.2) {
+                if (Grid[this.x+side][this.y] instanceof Empty) {
+                    Grid[this.x+side][this.y] = new Plant(this.x+side, this.y);
+                    Grid[this.x+side][this.y].Gravity = false;
+                    this.flower();
+                    return;
+                }
+            } 
+            if (insideGrid(this.x-side) && Math.random() < 0.2) {
+                if (Grid[this.x-side][this.y] instanceof Empty) {
+                    Grid[this.x-side][this.y] = new Plant(this.x-side, this.y);
+                    Grid[this.x-side][this.y].Gravity = false;
+                    this.flower();
+                    return;
+                }
+            } 
+            if (insideGrid(this.y-1) && Math.random() < 0.2) {
+                if (Grid[this.x][this.y-1] instanceof Empty) {
+                    Grid[this.x][this.y-1] = new Plant(this.x, this.y-1);
+                    Grid[this.x][this.y-1].Gravity = false;
+                    this.flower();
+                    return;
+                }
+            }
+
+            if (insideGrid(this.y+1) && Math.random() < 0.2) {
+                if (Grid[this.x][this.y+1] instanceof Empty) {
+                    Grid[this.x][this.y+1] = new Plant(this.x, this.y+1);
+                    Grid[this.x][this.y+1].Gravity = false;
+                    this.flower();
+                    return;
+                }
+            }
+        }
+        return;
+    }
+}
+
+class Flower extends Dust {
+    constructor(x, y) {
+        super("12", [181, 169, 159, 255], x, y);
+        this.Category = CATEGORY.LIFE;
+        this.planted = false;
+    }
+
+    bloom() {
+        this.planted = true
+        this.Color = [252, 196, 57, 225]
+        var colorType = Math.floor(Math.random() * 3) + 1;
+        var petalColor;
+        switch (colorType) {
+            case 1:
+            default:
+                petalColor = [255, 144, 93, 225]
+                break;
+            case 2:
+                petalColor = [255, 34, 87, 225]
+                break;
+            case 3:
+                petalColor = [17, 186, 202, 225]
+                break;
+        }
+        if (insideGrid(this.y+1) && (Grid[this.x][this.y+1] instanceof Empty || Grid[this.x][this.y+1] instanceof Plant)) {
+            Grid[this.x][this.y+1] = new FlowerPetal(this.x, this.y+1, this.x, this.y)
+            Grid[this.x][this.y+1].Color = petalColor;
+        }
+        if (insideGrid(this.y-1) && (Grid[this.x][this.y-1] instanceof Empty || Grid[this.x][this.y-1] instanceof Plant)) {
+            Grid[this.x][this.y-1] = new FlowerPetal(this.x, this.y-1, this.x, this.y)
+            Grid[this.x][this.y-1].Color = petalColor;
+        }
+        if (insideGrid(this.x+1) && (Grid[this.x+1][this.y] instanceof Empty || Grid[this.x+1][this.y] instanceof Plant)) {
+            Grid[this.x+1][this.y] = new FlowerPetal(this.x+1, this.y, this.x, this.y)
+            Grid[this.x+1][this.y].Color = petalColor;
+        }
+        if (insideGrid(this.x-1) && (Grid[this.x-1][this.y] instanceof Empty || Grid[this.x-1][this.y] instanceof Plant)) {
+            Grid[this.x-1][this.y] = new FlowerPetal(this.x-1, this.y, this.x, this.y)
+            Grid[this.x-1][this.y].Color = petalColor;
+        }
+    }
+
+    onTick() {
+        if (!this.planted) {
+            super.onTick();
+            if (insideGrid(this.y+1)) {
+                if (Grid[this.x][this.y+1] instanceof Plant || Grid[this.x][this.y+1] instanceof Sand) {
+                    this.bloom()
+                } 
+            }
+        }
+        else {
+            if (insideGrid(this.y+1)) {
+                if (!(Grid[this.x][this.y+1] instanceof Plant || Grid[this.x][this.y+1] instanceof Sand || Grid[this.x][this.y+1] instanceof FlowerPetal)) {
+                    Grid[this.x][this.y] = new Empty(this.x, this.y)
+                    
+                } 
+            }
+        }
+        return;
+    }
+}
+
+class FlowerPetal extends Solid {
+    constructor(x, y, conx, cony) {
+        super("13", [226, 226, 226, 255], x, y);
+        this.connectionX = conx;
+        this.connectionY =  cony;
+    }
+
+    onTick() {
+        if (!(Grid[this.connectionX][this.connectionY] instanceof Flower)) {
+            Grid[this.x][this.y] = new Empty(this.x, this.y)
+        }
+        return;
     }
 }

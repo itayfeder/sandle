@@ -22,7 +22,9 @@ const DATA_BY_ID = {
     "7": Fire,
     "8": Oil,
     "9": Ice,
-    "10": Wood
+    "10": Wood,
+    "11": Plant,
+    "12": Flower
 };
 
 const GRID_SIZE = 128;
@@ -107,6 +109,31 @@ function DrawScreen() {
             pixels.data[i + 3] = col[3]
         }
     }
+    Ctx.putImageData(pixels, 0, 0)
+
+    pixels = Ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE)  
+
+    let size = Number(document.getElementById("brushWidthSlider").value);
+    let optimisedSize = size * 2 - 1;
+    if (!IsHeld && Mouse.x != -1 && Mouse.y != -1) {
+        for (let i = 0; i < optimisedSize * optimisedSize; i++) {
+            var x = Mouse.x - (size-1) + (i % optimisedSize);
+            var y = Mouse.y - (size-1) + Math.floor(i / optimisedSize);
+            if (insideGrid(x) && insideGrid(y)) {
+                for (let x2 = x * PIXEL_SIZE; x2 < x * PIXEL_SIZE + PIXEL_SIZE; x2++) {
+                    for (let y2 = y * PIXEL_SIZE; y2 < y * PIXEL_SIZE + PIXEL_SIZE; y2++) {
+                        let t = 4*(x2 + y2* CANVAS_SIZE)
+                        let col = [207, 184, 216, 255]
+                        pixels.data[t + 0] = col[0]
+                        pixels.data[t + 1] = col[1]
+                        pixels.data[t + 2] = col[2]
+                        pixels.data[t + 3] = col[3]
+                    }
+                }
+            }
+        }
+    }
+
     Ctx.putImageData(pixels, 0, 0)
 
 }
