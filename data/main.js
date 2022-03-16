@@ -3,6 +3,7 @@ var Ctx;
 var Interval;
 var IsHeld = false;
 var CurrentElement = "1";
+var CurrentTool = "1";
 
 var Mouse = {
     x: 0,
@@ -128,16 +129,71 @@ for (let i = 0; i < GRID_SIZE; i++) {
 
 function Tick() {
     if (IsHeld && Mouse.x != -1 && Mouse.y != -1 && Mouse.prevx != -1 && Mouse.prevy != -1) {
-        allPoints(Mouse.prevx, Mouse.prevy, Mouse.x, Mouse.y, (xpos, ypos) => {
-            let size = Number(document.getElementById("brushWidthSlider").value);
-            let optimisedSize = size * 2 - 1;
-            for (let i = 0; i < optimisedSize * optimisedSize; i++) {
-                if (insideGrid(xpos - (size-1) + (i % optimisedSize)) && insideGrid(ypos - (size-1) + Math.floor(i / optimisedSize)))
-                    Grid[xpos - (size-1) + (i % optimisedSize)][ypos - (size-1) + Math.floor(i / optimisedSize)] = new DATA_BY_ID[CurrentElement](xpos - (size-1) + (i % optimisedSize), ypos - (size-1) + Math.floor(i / optimisedSize));
-    
-            }
-        });
-        
+        switch (CurrentTool) {
+            case "1":
+            default:
+                allPoints(Mouse.prevx, Mouse.prevy, Mouse.x, Mouse.y, (xpos, ypos) => {
+                    let size = Number(document.getElementById("brushWidthSlider").value);
+                    let optimisedSize = size * 2 - 1;
+                    for (let i = 0; i < optimisedSize * optimisedSize; i++) {
+                        if (insideGrid(xpos - (size-1) + (i % optimisedSize)) && insideGrid(ypos - (size-1) + Math.floor(i / optimisedSize)))
+                            Grid[xpos - (size-1) + (i % optimisedSize)][ypos - (size-1) + Math.floor(i / optimisedSize)] = new DATA_BY_ID[CurrentElement](xpos - (size-1) + (i % optimisedSize), ypos - (size-1) + Math.floor(i / optimisedSize));
+            
+                    }
+                });
+                break;
+        //     case "2":
+        //         var origin = DATA_BY_ID[Grid[Mouse.x][Mouse.y].Id];
+        //         const func = (xpos, ypos) => {
+        //             var upPos = [xpos, ypos];
+        //             var [up, left, down, right] = [false, false, false, false];
+        //             while (!up) {
+        //                 if (insideGrid(upPos[1]-1) && Grid[upPos[0]][upPos[1]-1] instanceof origin) {
+        //                     upPos[1] = upPos[1]-1;
+        //                 }
+        //                 else {
+        //                     up = true;
+        //                 }
+        //             }
+        //             while (!down) {
+        //                 var sidePos = [upPos[0], upPos[1]]
+        //                 while (!left) {
+        //                     if (insideGrid(sidePos[0]-1) && Grid[sidePos[0]-1][sidePos[1]] instanceof origin) {
+        //                         Grid[sidePos[0]-1][sidePos[1]] = new DATA_BY_ID[CurrentElement](sidePos[0]-1, sidePos[1]);
+        //                         sidePos[0] = sidePos[0]-1;
+        //                     }
+        //                     else {
+        //                         left = true;
+        //                     }
+        //                 }
+        //                 sidePos = [upPos[0], upPos[1]]
+        //                 while (!right) {
+        //                     if (insideGrid(sidePos[0]+1) && Grid[sidePos[0]+1][sidePos[1]] instanceof origin) {
+        //                         Grid[sidePos[0]+1][sidePos[1]] = new DATA_BY_ID[CurrentElement](sidePos[0]+1, sidePos[1]);
+        //                         sidePos[0] = sidePos[0]+1;
+        //                     }
+        //                     else {
+        //                         right = true;
+        //                     }
+        //                 }
+                        
+        //                 if (insideGrid(upPos[1]+1) && Grid[upPos[0]][upPos[1]+1] instanceof origin) {
+        //                     Grid[upPos[0]][upPos[1]+1] = new DATA_BY_ID[CurrentElement](upPos[0], upPos[1]+1);
+        //                     left = false;
+        //                     right = false;
+        //                     upPos[1] = upPos[1]+1;
+        //                 }
+        //                 else {
+        //                     down = true;
+        //                 }
+        //             }
+                    
+        //         }
+        //         if (origin != DATA_BY_ID[CurrentElement]) {
+        //             func(Mouse.x, Mouse.y);
+        //         }
+        //         break;
+        }
     }
 
     shuffle(xCoordinates)
