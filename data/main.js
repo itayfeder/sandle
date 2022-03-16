@@ -77,6 +77,12 @@ window.onload = function () {
     window.addEventListener("mouseup", function(e) {
         IsHeld = false;
     });
+    window.addEventListener("ontouchstart", function(e) {
+        IsHeld = true;
+    });
+    window.addEventListener("ontouchend", function(e) {
+        IsHeld = false;
+    });
     window.addEventListener("mousemove", onMouseMoved);
     /////////////////////
 
