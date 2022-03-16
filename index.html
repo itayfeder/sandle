@@ -10,15 +10,19 @@
 </head>
 <body style="background-color: #200B26; position: relative;">
     <div id="buttons" style="left: 0; width: 200px; height: 768px; position: absolute; background-color: #34173D;">
-        <div id="elementButtons">
-            <h2 style="color: #FFFFFF; margin-bottom: 0px;">Elements:</h2>
-
+        <h2 style="color: #FFFFFF; margin-bottom: 0px;">Elements:</h2>
+        <div id="materialButtons">
+            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Materials:</h2>
         </div>
+        <div id="utilityButtons">
+            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Utilities:</h2>
+        </div>
+
         <div id="brushSizeButtons">
             <h2 style="color: #FFFFFF; margin-bottom: 0px;">Brushes:</h2>
-            <button onclick="CurrentTool = '1'"><i class="fa-solid fa-brush"></i></button>
+            <button onclick="CurrentTool = '1'" style="margin-bottom: 0px;"><i class="fa-solid fa-brush"></i></button>
             <!-- <button onclick="CurrentTool = '2'"><i class="fa-solid fa-fill-drip"></i></button> -->
-            <br></br>
+            <br style="margin-bottom: 0px; margin-top: 0px;"></br>
             <input id="brushWidthSlider" type="range" value="2" min="1" max="5" style=" margin-top: 0px;" oninput="this.nextElementSibling.value = this.value">
             <output style="color: #FFFFFF; font-size: 24px;">2</output>
         </div>

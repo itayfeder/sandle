@@ -13,7 +13,18 @@ function generateButtons() {
         btn.onclick = function (event) {
             CurrentElement = key;
         }
-        document.getElementById('elementButtons').appendChild(btn);
+        switch (element.Category) {
+            case CATEGORY.MATERIALS:
+            default:
+                document.getElementById('materialButtons').appendChild(btn);
+                break;
+            case CATEGORY.UTILITIES:
+                document.getElementById('utilityButtons').appendChild(btn);
+                break;
+            case CATEGORY.LIFE:
+                document.getElementById('lifeButtons').appendChild(btn);
+                break;
+        }
     }
 }
 

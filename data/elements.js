@@ -1,3 +1,9 @@
+const CATEGORY = {
+    MATERIALS: 1,
+    UTILITIES: 2,
+    LIFE: 3
+}
+
 class Element {
     constructor(id, color, x, y) {
         this.Color = color;
@@ -11,6 +17,7 @@ class Element {
         this.Flammability = 0.5;
         this.Coolability = 0.01;
         this.Freezable = false;
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -23,6 +30,7 @@ class Empty extends Element {
         super("0", [38, 28, 40, 255], x ,y);
         this.Unbrekable = true;
         this.CanPassThrough = true;
+        this.Category = CATEGORY.UTILITIES;
     }
 }
 
@@ -116,6 +124,7 @@ class Sand extends Dust {
     constructor(x ,y) {
         super("1", [255, 228, 181, 255], x ,y);
         this.isFreeFalling = false;
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -131,6 +140,7 @@ class Water extends Liquid {
         this.HeatingId = "3";
         this.CoolingId = "9";
         this.Freezable = true;
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -143,6 +153,7 @@ class Steam extends Gas {
     constructor(x ,y) {
         super("3", [220, 220, 220, 255], x ,y);
         this.dispersionRate = 2
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -155,6 +166,7 @@ class Acid extends Liquid {
     constructor(x ,y) {
         super("4", [124, 252, 0, 255], x ,y);
         this.dispersionRate = 1
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -184,6 +196,7 @@ class Multi extends Solid {
         super("5", [186, 85, 211, 255], x ,y);
         this.replicating = null;
         this.Unbrekable = true;
+        this.Category = CATEGORY.UTILITIES;
     }
 
     onTick() {
@@ -228,6 +241,7 @@ class Wall extends Solid {
     constructor(x, y) {
         super("6", [170, 74, 68, 255], x, y);
         this.Unbrekable = true;
+        this.Category = CATEGORY.UTILITIES;
     }
 }
 
@@ -237,6 +251,7 @@ class Fire extends Gas {
         this.dispersionRate = 1
         this.dissipationTime = 5;
         this.riseUp = false;
+        this.Category = CATEGORY.UTILITIES;
     }
 
     onTick() {
@@ -280,6 +295,7 @@ class Oil extends Liquid {
         this.dispersionRate = 2
         this.HeatingId = "7";
         this.Flammability = 0.75;
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -298,6 +314,7 @@ class Ice extends Dust {
         super("9", [174, 219, 240, 255], x ,y);
         this.HeatingId = "2";
         this.isFreeFalling = false;
+        this.Category = CATEGORY.MATERIALS;
     }
 
     onTick() {
@@ -343,5 +360,6 @@ class Wood extends Solid {
         super("10", [150, 111, 51, 255], x, y);
         this.HeatingId = "7";
         this.Flammability = 0.9;
+        this.Category = CATEGORY.MATERIALS;
     }
 }
