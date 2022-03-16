@@ -21,7 +21,8 @@ const DATA_BY_ID = {
     "6": Wall,
     "7": Fire,
     "8": Oil,
-    "9": Ice
+    "9": Ice,
+    "10": Wood
 };
 
 const GRID_SIZE = 128;
@@ -101,18 +102,6 @@ function DrawScreen() {
     }
     Ctx.putImageData(pixels, 0, 0)
 
-    // //Ctx.fillStyle = "white";
-    // for (let x = 0; x < GRID_SIZE; x++) {
-    //     for (let y = 0; y < GRID_SIZE; y++) {
-    //         var Element = Grid[x][y];
-    //         if (!(Element instanceof Empty)) {
-    //             let test = PIXEL_SIZE;
-    //         }
-    //         Ctx.fillStyle = Element.Color;
-    //         Ctx.fillRect(PIXEL_SIZE * x, PIXEL_SIZE * y, PIXEL_SIZE, PIXEL_SIZE);
-    //     }
-    // }
-    // //Ctx.fillStyle = "white";
 }
 
 const shuffle = (array) => {

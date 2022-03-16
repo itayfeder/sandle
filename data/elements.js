@@ -241,19 +241,19 @@ class Fire extends Gas {
         if (this.dissipationTime == 3)
             this.Color = [84, 84, 79, 255]
         let burned = false;
-        if (insideGrid(this.y-1) && !Grid[this.x][this.y-1].Unbrekable && !(Grid[this.x][this.y-1] instanceof Fire) && Math.random() > Grid[this.x][this.y-1].Flammability) {
+        if (insideGrid(this.y-1) && !Grid[this.x][this.y-1].Unbrekable && !(Grid[this.x][this.y-1] instanceof Fire) && Math.random() < Grid[this.x][this.y-1].Flammability) {
             Grid[this.x][this.y-1] = new DATA_BY_ID[Grid[this.x][this.y-1].HeatingId](this.x, this.y-1)
             burned = true;
         }
-        if (insideGrid(this.y+1) && !Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire) && Math.random() > Grid[this.x][this.y+1].Flammability) {
+        if (insideGrid(this.y+1) && !Grid[this.x][this.y+1].Unbrekable && !(Grid[this.x][this.y+1] instanceof Fire) && Math.random() < Grid[this.x][this.y+1].Flammability) {
             Grid[this.x][this.y+1] = new DATA_BY_ID[Grid[this.x][this.y+1].HeatingId](this.x, this.y+1)
             burned = true;
         }
-        if (insideGrid(this.x-1) && !Grid[this.x-1][this.y].Unbrekable && !(Grid[this.x-1][this.y] instanceof Fire) && Math.random() > Grid[this.x-1][this.y].Flammability) {
+        if (insideGrid(this.x-1) && !Grid[this.x-1][this.y].Unbrekable && !(Grid[this.x-1][this.y] instanceof Fire) && Math.random() < Grid[this.x-1][this.y].Flammability) {
             Grid[this.x-1][this.y] = new DATA_BY_ID[Grid[this.x-1][this.y].HeatingId](this.x-1, this.y)
             burned = true;
         }
-        if (insideGrid(this.x+1) && !Grid[this.x+1][this.y].Unbrekable && !(Grid[this.x+1][this.y] instanceof Fire) && Math.random() > Grid[this.x+1][this.y].Flammability) {
+        if (insideGrid(this.x+1) && !Grid[this.x+1][this.y].Unbrekable && !(Grid[this.x+1][this.y] instanceof Fire) && Math.random() < Grid[this.x+1][this.y].Flammability) {
             Grid[this.x+1][this.y] = new DATA_BY_ID[Grid[this.x+1][this.y].HeatingId](this.x+1, this.y)
             burned = true;
         }
@@ -273,6 +273,7 @@ class Oil extends Liquid {
         super("8", [73, 76, 79, 255], x ,y);
         this.dispersionRate = 2
         this.HeatingId = "7";
+        this.Flammability = 0.75;
     }
 
     onTick() {
@@ -317,5 +318,13 @@ class Ice extends Dust {
         }
         
         return;
+    }
+}
+
+class Wood extends Solid {
+    constructor(x, y) {
+        super("10", [150, 111, 51, 255], x, y);
+        this.HeatingId = "7";
+        this.Flammability = 0.9;
     }
 }
