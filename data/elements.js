@@ -42,6 +42,21 @@ class Solid extends Element {
     }
 }
 
+class GravitySolid extends Solid {
+    constructor(id, color, x, y) {
+        super(id, color, x ,y);
+        this.CanPassThrough = false;
+    }
+
+    onTick() {
+        if (insideGrid(this.y+1)) {
+            if (Grid[this.x][this.y+1].CanPassThrough) {
+                switchPlaces(this.x, this.y, this.x, this.y+1, this)
+            }
+        }
+    }
+}
+
 class Liquid extends Element {
     constructor(id, color, x, y) {
         super(id, color, x ,y);
@@ -532,5 +547,68 @@ class FlowerPetal extends Solid {
             Grid[this.x][this.y] = new Empty(this.x, this.y)
         }
         return;
+    }
+}
+
+class PinkSand extends Dust {
+    constructor(x ,y) {
+        super("14", [237, 151, 151, 255], x ,y);
+        this.isFreeFalling = false;
+        this.Category = CATEGORY.MATERIALS;
+    }
+
+    onTick() {
+        super.onTick()
+        return;
+    }
+}
+
+class Stone extends GravitySolid {
+    constructor(x ,y) {
+        super("15", [136, 140, 141, 255], x ,y);
+        this.isFreeFalling = false;
+        this.Category = CATEGORY.MATERIALS;
+    }
+
+    onTick() {
+        super.onTick()
+        return;
+    }
+}
+
+class RainbowSand extends Dust {
+    constructor(x ,y) {
+        super("16", [255, 255, 127, 255], x ,y);
+        this.isFreeFalling = false;
+        this.Category = CATEGORY.MATERIALS;
+    }
+
+
+    onTick() {
+        super.onTick()
+        let base = (this.x + this.y + (performance.now() / 32)) % 90;
+        this.Color = this.toRGB(base / 90, 0.5, 1)
+        return;
+    }
+
+    toRGB(h, s, v) {
+        var r, g, b;
+
+        var i = Math.floor(h * 6);
+        var f = h * 6 - i;
+        var p = v * (1 - s);
+        var q = v * (1 - f * s);
+        var t = v * (1 - (1 - f) * s);
+
+        switch (i % 6) {
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+
+        return [ r * 255, g * 255, b * 255, 255];
     }
 }

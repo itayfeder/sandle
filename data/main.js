@@ -24,7 +24,10 @@ const DATA_BY_ID = {
     "9": Ice,
     "10": Wood,
     "11": Plant,
-    "12": Flower
+    "12": Flower,
+    "14": PinkSand,
+    "15": Stone,
+    "16": RainbowSand
 };
 
 const GRID_SIZE = 128;
