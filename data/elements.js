@@ -18,6 +18,7 @@ class Element {
         this.Coolability = 0.01;
         this.Freezable = false;
         this.Category = CATEGORY.MATERIALS;
+        this.plant = false;
     }
 
     onTick() {
@@ -253,6 +254,7 @@ class Fire extends Gas {
         this.dissipationTime = 5;
         this.riseUp = false;
         this.Category = CATEGORY.UTILITIES;
+        this.Flammability = -1;
     }
 
     onTick() {
@@ -261,7 +263,7 @@ class Fire extends Gas {
             return;
         }
         if (this.dissipationTime == 3)
-            this.Color = [84, 84, 79, 255]
+            this.Color = [54, 69, 79, 255]
         let burned = false;
         if (insideGrid(this.y-1) && !Grid[this.x][this.y-1].Unbrekable && !(Grid[this.x][this.y-1] instanceof Fire) && Math.random() < Grid[this.x][this.y-1].Flammability) {
             Grid[this.x][this.y-1] = new DATA_BY_ID[Grid[this.x][this.y-1].HeatingId](this.x, this.y-1)
@@ -281,9 +283,8 @@ class Fire extends Gas {
         }
         if (burned) {
             Grid[this.x][this.y] = new DATA_BY_ID["0"](this.x, this.y)
-            this.dispersionRate = 0;
+            this.dissipationTime = 0;
         }
-
         super.onTick()
         this.dissipationTime--;
         return;
@@ -369,6 +370,10 @@ class Plant extends Dust {
     constructor(x, y) {
         super("11", [90, 171, 97, 255], x, y);
         this.Category = CATEGORY.LIFE;
+        this.Flammability = 0.7;
+        this.HeatingId = "7";
+        this.plant = true;
+
     }
 
     flower() {
@@ -442,6 +447,10 @@ class Flower extends Dust {
         super("12", [181, 169, 159, 255], x, y);
         this.Category = CATEGORY.LIFE;
         this.planted = false;
+        this.isFreeFalling = false;
+        this.Flammability = 0.7;
+        this.HeatingId = "7";
+        this.plant = true;
     }
 
     bloom() {
@@ -485,9 +494,17 @@ class Flower extends Dust {
             if (insideGrid(this.y+1)) {
                 if (Grid[this.x][this.y+1] instanceof Plant || Grid[this.x][this.y+1] instanceof Sand) {
                     this.bloom()
-                } 
+                }
+                else if (!(Grid[this.x][this.y+1] instanceof Plant || Grid[this.x][this.y+1] instanceof Sand || Grid[this.x][this.y+1] instanceof Empty || Grid[this.x][this.y+1] instanceof Flower)) {
+                    Grid[this.x][this.y] = new Empty(this.x, this.y)
+                }
             }
+            else {
+                Grid[this.x][this.y] = new Empty(this.x, this.y)
+            }
+
         }
+
         else {
             if (insideGrid(this.y+1)) {
                 if (!(Grid[this.x][this.y+1] instanceof Plant || Grid[this.x][this.y+1] instanceof Sand || Grid[this.x][this.y+1] instanceof FlowerPetal)) {
@@ -505,6 +522,9 @@ class FlowerPetal extends Solid {
         super("13", [226, 226, 226, 255], x, y);
         this.connectionX = conx;
         this.connectionY =  cony;
+        this.Flammability = 0.7;
+        this.HeatingId = "7";
+        this.plant = true;
     }
 
     onTick() {

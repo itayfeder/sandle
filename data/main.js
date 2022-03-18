@@ -1,7 +1,6 @@
 var Canvas;
 var Ctx;
 var Interval;
-var IsHeld = false;
 var CurrentElement = "1";
 var CurrentTool = "1";
 
@@ -9,7 +8,8 @@ var Mouse = {
     x: 0,
     prevx: 0,
     y: 0,
-    prevy: 0
+    prevy: 0,
+    IsHeld: false
 }
 const DATA_BY_ID = {
     "0": Empty,
@@ -74,16 +74,16 @@ window.onload = function () {
         Tick();
     }, 1000 / fps);
     window.addEventListener("mousedown", function(e) {
-        IsHeld = true;
+        Mouse.IsHeld = true;
     });
     window.addEventListener("mouseup", function(e) {
-        IsHeld = false;
+        Mouse.IsHeld = false;
     });
     window.addEventListener("touchstart", function(e) {
-        IsHeld = true;
+        Mouse.IsHeld = true;
     });
     window.addEventListener("touchend", function(e) {
-        IsHeld = false;
+        Mouse.IsHeld = false;
     });
     window.addEventListener("mousemove", onMouseMoved);
     window.addEventListener("touchmove", onTouchMoved);
@@ -115,7 +115,7 @@ function DrawScreen() {
 
     let size = Number(document.getElementById("brushWidthSlider").value);
     let optimisedSize = size * 2 - 1;
-    if (!IsHeld && Mouse.x != -1 && Mouse.y != -1) {
+    if (!Mouse.IsHeld && Mouse.x != -1 && Mouse.y != -1) {
         for (let i = 0; i < optimisedSize * optimisedSize; i++) {
             var x = Mouse.x - (size-1) + (i % optimisedSize);
             var y = Mouse.y - (size-1) + Math.floor(i / optimisedSize);
@@ -151,7 +151,7 @@ for (let i = 0; i < GRID_SIZE; i++) {
 }
 
 function Tick() {
-    if (IsHeld && Mouse.x != -1 && Mouse.y != -1 && Mouse.prevx != -1 && Mouse.prevy != -1) {
+    if (Mouse.IsHeld && Mouse.x != -1 && Mouse.y != -1 && Mouse.prevx != -1 && Mouse.prevy != -1) {
         switch (CurrentTool) {
             case "1":
             default:
