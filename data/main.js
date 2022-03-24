@@ -26,8 +26,7 @@ const DATA_BY_ID = {
     "11": Plant,
     "12": Flower,
     "14": PinkSand,
-    "15": Stone,
-    "16": RainbowSand
+    "15": Stone
 };
 
 const GRID_SIZE = 128;
