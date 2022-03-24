@@ -6,19 +6,21 @@
     <script src="data/gen.js"></script>
     <script src="data/main.js"></script>
     <script src="https://kit.fontawesome.com/c4d492b758.js" crossorigin="anonymous"></script>
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body style="background-color: #200B26; position: relative;">
     <div id="buttons" style="left: 0; width: 200px; height: 768px; position: absolute; background-color: #34173D;">
         <h2 style="color: #FFFFFF; margin-bottom: 0px;">Elements:</h2>
         <div id="materialButtons">
-            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Materials:</h2>
+            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Materials:</h4>
         </div>
         <div id="utilityButtons">
-            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Utilities:</h2>
+            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Utilities:</h4>
         </div>
         <div id="lifeButtons">
-            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Life:</h2>
+            <h4 style="color: #DDDDDD; margin-bottom: 0px;">Life:</h4>
         </div>
 
         <div id="brushSizeButtons">
@@ -30,10 +32,22 @@
         </div>
         <div id="brushSizeButtons">
             <h2 style="color: #FFFFFF; margin-bottom: 0px;">Screen Settings:</h2>
-            <button onclick="clearScreen()"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+            <button onclick="clearScreen()"><i class="fa-solid fa-arrow-rotate-right"></i></button><br><br>
+        </div>
+        <div id="worldButtons">
+            <h2 style="color: #FFFFFF; margin-bottom: 0px;">World Settings:</h2>
+            <input type="text" id="name" name="name">
+            <button onclick="saveScreen()">Save</button>
+            <label for="files" class="btn" style="color: #FFFFFF;">Load Image</label>
+            <input id="files" style="visibility:hidden;" type="file" onchange="loadScreen(this);">
         </div>
     </div>
     <canvas id="screen" width="768" height="768" style="left: 225px; max-width: 768px; max-height: 768px; border:5px solid #000000; position: absolute;">
+        Your browser does not support the HTML canvas tag.
+    </canvas>
+
+    <img id="tempImg" src="#" alt="your image"/>
+    <canvas id="tempScreen" width="768" height="768" style="visibility:hidden; left: 225px; max-width: 768px; max-height: 768px; border:5px solid #000000; position: absolute;">
         Your browser does not support the HTML canvas tag.
     </canvas>
 </body>

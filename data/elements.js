@@ -24,6 +24,10 @@ class Element {
     onTick() {
 
     }
+
+    static load(x, y, color) {
+        
+    }
 }
 
 class Empty extends Element {
@@ -32,6 +36,10 @@ class Empty extends Element {
         this.Unbrekable = true;
         this.CanPassThrough = true;
         this.Category = CATEGORY.UTILITIES;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Empty(x,y);
     }
 }
 
@@ -148,6 +156,10 @@ class Sand extends Dust {
         super.onTick()
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Sand(x,y);
+    }
 }
 
 class Water extends Liquid {
@@ -164,6 +176,10 @@ class Water extends Liquid {
         super.onTick()
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Water(x,y);
+    }
 }
 
 class Steam extends Gas {
@@ -176,6 +192,10 @@ class Steam extends Gas {
     onTick() {
         super.onTick()
         return;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Steam(x,y);
     }
 }
 
@@ -205,6 +225,10 @@ class Acid extends Liquid {
         }
         super.onTick()
         return;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Acid(x,y);
     }
 }
 
@@ -252,6 +276,10 @@ class Multi extends Solid {
         }
         
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Multi(x,y);
+    }
 }
 
 class Wall extends Solid {
@@ -259,6 +287,10 @@ class Wall extends Solid {
         super("6", [170, 74, 68, 255], x, y);
         this.Unbrekable = true;
         this.Category = CATEGORY.UTILITIES;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Wall(x,y);
     }
 }
 
@@ -304,6 +336,13 @@ class Fire extends Gas {
         this.dissipationTime--;
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Fire(x,y);
+        if (compareColors(color, [54, 69, 79, 255])) {
+            Grid[x][y].dissipationTime = 3;
+        }
+    }
 }
 
 class Oil extends Liquid {
@@ -323,6 +362,10 @@ class Oil extends Liquid {
         }
         super.onTick()
         return;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Oil(x,y);
     }
 }
 
@@ -370,6 +413,10 @@ class Ice extends Dust {
         
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Ice(x,y);
+    }
 }
 
 class Wood extends Solid {
@@ -378,6 +425,10 @@ class Wood extends Solid {
         this.HeatingId = "7";
         this.Flammability = 0.9;
         this.Category = CATEGORY.MATERIALS;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Wood(x,y);
     }
 }
 
@@ -455,6 +506,11 @@ class Plant extends Dust {
         }
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Plant(x,y);
+        Grid[x][y].Gravity = false;
+    }
 }
 
 class Flower extends Dust {
@@ -530,6 +586,13 @@ class Flower extends Dust {
         }
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Flower(x,y);
+        if (compareColors(color, [252, 196, 57, 225])) {
+            Grid[x][y].bloom();
+        }
+    }
 }
 
 class FlowerPetal extends Solid {
@@ -561,6 +624,10 @@ class PinkSand extends Dust {
         super.onTick()
         return;
     }
+
+    static load(x, y, color) {
+        Grid[x][y] = new PinkSand(x,y);
+    }
 }
 
 class Stone extends GravitySolid {
@@ -573,6 +640,10 @@ class Stone extends GravitySolid {
     onTick() {
         super.onTick()
         return;
+    }
+
+    static load(x, y, color) {
+        Grid[x][y] = new Stone(x,y);
     }
 }
 
